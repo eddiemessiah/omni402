@@ -4,7 +4,8 @@
   "description": "Turn any HTTP API into an x402 pay-per-call endpoint, settled in stablecoins on Celo.",
   "type": "module",
   "bin": {
-    "x402ify": "./bin/x402ify.ts"
+    "x402ify": "./bin/x402ify.ts",
+    "x402buy": "./bin/buy.ts"
   },
   "exports": {
     ".": {

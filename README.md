@@ -63,6 +63,27 @@ Without `MPP_SECRET_KEY` + `X402_API_KEY` the gateway runs in **challenge-only**
 
 > Develop on **Celo Sepolia** first (`X402_NETWORK=celo-sepolia`, testnet USDC from [faucet.circle.com](https://faucet.circle.com)). Flip to `celo` only when you're ready for real money.
 
+## Buy as an agent
+
+The other half: a wallet-native client that pays MPP/x402 endpoints with no
+account or API key. `createBuyer` patches `fetch`, so an agent just calls the
+URL and the payment happens transparently (sign EIP-3009 → retry).
+
+```bash
+# BUYER_PRIVATE_KEY = a wallet with a little USDC and NO native gas
+pnpm --filter @glasscelo/x402ify exec tsx bin/buy.ts \
+  http://localhost:4100/ --network celo-sepolia --max 0.10
+```
+
+It prints the response, the settlement tx hash, and the Celoscan receipt link.
+Programmatically:
+
+```ts
+import { createBuyer } from "@glasscelo/x402ify";
+const buyer = createBuyer({ privateKey: process.env.BUYER_PRIVATE_KEY!, network: "celo" });
+const { status, body, reference } = await buyer.pay("https://your-api/premium");
+```
+
 ## Add an API to sell
 
 Add an entry to [`lanes.json`](./lanes.json) and put any key in `.env`. A lane whose key is missing is skipped with a warning rather than started.

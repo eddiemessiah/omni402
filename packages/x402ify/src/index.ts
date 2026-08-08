@@ -6,6 +6,7 @@
  * only AFTER a payment is verified by the Celo facilitator.
  */
 export { wrap, type WrapOptions, type Gateway } from "./wrap.js";
+export { createBuyer, type Buyer, type BuyerOptions, type PayResult } from "./buyer.js";
 export { CeloFacilitator } from "./facilitator.js";
 export type {
   PaymentRequirements,

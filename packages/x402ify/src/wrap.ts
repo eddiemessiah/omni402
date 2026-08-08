@@ -145,20 +145,23 @@ async function proxyUpstream(
   };
 }
 
-/** Best-effort extraction of a settlement tx hash from an MPP receipt header. */
+/**
+ * Extract the settlement tx hash from the MPP `Payment-Receipt` header.
+ * The header is base64url-encoded JSON whose `reference` is the tx hash
+ * (matches celo-org/mpp-celo-example). Falls back to a raw hex scan.
+ */
 function extractTx(web: Response): string | undefined {
-  for (const [k, v] of web.headers.entries()) {
-    if (!/receipt|payment/i.test(k)) continue;
-    const direct = v.match(/0x[0-9a-fA-F]{64}/);
-    if (direct) return direct[0];
-    try {
-      const json = JSON.parse(Buffer.from(v, "base64").toString("utf8"));
-      const s = JSON.stringify(json);
-      const m = s.match(/0x[0-9a-fA-F]{64}/);
-      if (m) return m[0];
-    } catch {
-      /* not base64 json */
-    }
+  const hdr = web.headers.get("payment-receipt");
+  if (!hdr) return undefined;
+  try {
+    const receipt = JSON.parse(Buffer.from(hdr, "base64url").toString("utf8"));
+    const ref = (receipt as { reference?: unknown }).reference;
+    if (typeof ref === "string" && /^0x[a-fA-F0-9]{64}$/.test(ref)) return ref;
+    const m = JSON.stringify(receipt).match(/0x[0-9a-fA-F]{64}/);
+    if (m) return m[0];
+  } catch {
+    const m = hdr.match(/0x[0-9a-fA-F]{64}/);
+    if (m) return m[0];
   }
   return undefined;
 }
