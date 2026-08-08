@@ -1,0 +1,32 @@
+{
+  "name": "@glasscelo/x402ify",
+  "version": "0.1.0",
+  "description": "Turn any HTTP API into an x402 pay-per-call endpoint, settled in stablecoins on Celo.",
+  "type": "module",
+  "bin": {
+    "x402ify": "./bin/x402ify.ts"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "start": "tsx bin/x402ify.ts",
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "@glasscelo/config": "workspace:*",
+    "express": "^4.21.2",
+    "mppx": "0.8.7",
+    "viem": "^2.21.0",
+    "x402-express": "^1.2.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

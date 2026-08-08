@@ -1,0 +1,18 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "hub",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["--import", "tsx", "apps/hub/src/serve.ts"],
+      "port": 4021
+    },
+    {
+      "name": "hub-demo",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["--import", "tsx", "apps/hub/src/serve.ts"],
+      "env": { "DEMO": "1", "X402_NETWORK": "celo-sepolia" },
+      "port": 4021
+    }
+  ]
+}

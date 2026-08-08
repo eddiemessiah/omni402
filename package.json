@@ -1,0 +1,27 @@
+{
+  "name": "x402-alpha",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Convert any HTTP API into an x402 pay-per-call endpoint, settled in stablecoins on Celo.",
+  "packageManager": "pnpm@11.18.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "pnpm --filter @glasscelo/dashboard build",
+    "start": "node --import tsx apps/hub/src/serve.ts",
+    "hub": "node --import tsx apps/hub/src/serve.ts",
+    "wrap": "node --import tsx packages/x402ify/bin/x402ify.ts",
+    "supported": "node --import tsx packages/config/src/probe.ts",
+    "test": "node --import tsx packages/x402ify/test/challenge.smoke.ts && node --import tsx packages/x402ify/test/mpp.smoke.ts",
+    "typecheck": "tsc -b --pretty"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild", "keccak", "bufferutil", "utf-8-validate"]
+  }
+}

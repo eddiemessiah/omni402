@@ -1,0 +1,17 @@
+packages:
+  - "packages/*"
+  - "apps/*"
+
+# Approve install-time build scripts (pnpm 11). esbuild powers tsx/vite;
+# keccak/bufferutil/utf-8-validate back the eth signing + websocket stack.
+allowBuilds:
+  bufferutil: true
+  esbuild: true
+  keccak: true
+  utf-8-validate: true
+
+onlyBuiltDependencies:
+  - esbuild
+  - keccak
+  - bufferutil
+  - utf-8-validate

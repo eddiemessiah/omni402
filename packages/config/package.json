@@ -1,0 +1,23 @@
+{
+  "name": "@glasscelo/config",
+  "version": "0.1.0",
+  "description": "Single source of truth for Celo x402 networks, assets, and the facilitator.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "probe": "tsx src/probe.ts",
+    "build": "tsc -b"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

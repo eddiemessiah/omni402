@@ -1,0 +1,8 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/config" },
+    { "path": "packages/x402ify" },
+    { "path": "apps/hub" }
+  ]
+}
