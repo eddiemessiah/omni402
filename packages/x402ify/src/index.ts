@@ -7,6 +7,7 @@
  */
 export { wrap, type WrapOptions, type Gateway } from "./wrap.js";
 export { createBuyer, type Buyer, type BuyerOptions, type PayResult } from "./buyer.js";
+export { registerAgent, type RegisterResult } from "./erc8004.js";
 export { CeloFacilitator } from "./facilitator.js";
 export type {
   PaymentRequirements,

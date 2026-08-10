@@ -5,7 +5,8 @@
   "type": "module",
   "bin": {
     "x402ify": "./bin/x402ify.ts",
-    "x402buy": "./bin/buy.ts"
+    "x402buy": "./bin/buy.ts",
+    "omni-register-8004": "./bin/register-8004.ts"
   },
   "exports": {
     ".": {
