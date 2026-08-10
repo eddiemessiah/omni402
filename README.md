@@ -1,8 +1,8 @@
-# GlassCelo402
+# Omni402
 
 > **Turn any HTTP API into a pay-per-call endpoint that AI agents can buy from directly — settled in stablecoins on Celo, tracked in one dashboard.**
 
-APIs were built for humans with accounts and keys; machines can't sign up. GlassCelo402 removes the human from both sides: a provider wraps an existing API in one command, and any agent pays per request over the **Machine Payments Protocol (MPP / x402)** with no account, no key, and no gas token. Every call becomes a real USDC settlement on Celo.
+APIs were built for humans with accounts and keys; machines can't sign up. Omni402 removes the human from both sides: a provider wraps an existing API in one command, and any agent pays per request over the **Machine Payments Protocol (MPP / x402)** with no account, no key, and no gas token. Every call becomes a real USDC settlement on Celo.
 
 Inspired by [GlassBox402](https://github.com/dhernz/Glassbox402) (ETHGlobal Lisbon) — this is the Celo-native successor.
 

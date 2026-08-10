@@ -9,7 +9,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { wrap } from "@glasscelo/x402ify";
-import { getNetwork, slugify } from "@glasscelo/config";
+import { getNetwork, slugify, BRAND } from "@glasscelo/config";
 import { createHub } from "./hub.js";
 import { startDemo } from "./demo.js";
 
@@ -21,6 +21,7 @@ interface Lane {
   header?: string;
   query?: string;
   asset?: string;
+  description?: string;
 }
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -72,17 +73,27 @@ async function main(): Promise<void> {
       network: networkKey,
       asset: lane.asset,
       name: lane.name,
+      description: lane.description,
       header: header ?? undefined,
       query: query ?? undefined,
       onEvent: hub.publish,
     });
     // Mount on the hub's public port under /pay/<slug> instead of a private port.
     const slug = slugify(lane.name);
-    hub.mountLane(slug, gateway.app);
+    hub.mountLane(slug, gateway.app, {
+      slug,
+      name: lane.name,
+      price: lane.price,
+      asset: gateway.asset.symbol,
+      method: "GET",
+      sample: lane.sample ?? "",
+      description: lane.description,
+    });
     started.push(`${lane.name} → /pay/${slug} (${lane.price} ${gateway.asset.symbol})`);
   }
+  hub.finalizeLanes(network.key);
 
-  console.log(`\n  ● GlassCelo402 hub — ${network.name}`);
+  console.log(`\n  ● ${BRAND.name} hub — ${network.name}`);
   console.log(`    dashboard   ${url}`);
   console.log(`    payout      ${wallet}`);
   console.log(

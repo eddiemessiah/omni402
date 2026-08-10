@@ -42,10 +42,10 @@ try {
   const text =
     Array.isArray(res.content) && res.content[0]?.type === "text" ? res.content[0].text : "";
   console.log(`\n  --- list_paid_apis returned ---\n${text}\n`);
-  check(/Chuck Norris Jokes/.test(text), "catalog includes the Chuck Norris lane");
+  check(/Celo Token Prices/.test(text), "catalog includes the Celo Token Prices lane");
   check(/USDC\/call/.test(text), "shows a per-call USDC price");
   check(
-    /http:\/\/localhost:4021\/pay\/chuck-norris-jokes/.test(text),
+    /http:\/\/localhost:4021\/pay\/celo-token-prices/.test(text),
     "shows the public /pay/<slug> URL",
   );
 } finally {

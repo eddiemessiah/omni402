@@ -8,6 +8,12 @@
  * build-with-ai/x402) and the live facilitator at x402.celo.org.
  */
 
+/** Display brand — the one place the product name lives. */
+export const BRAND = {
+  name: "Omni402",
+  tagline: "Turn any API into an agent-payable endpoint on Celo.",
+} as const;
+
 export type NetworkKey = "celo" | "celo-sepolia";
 
 export interface AssetConfig {

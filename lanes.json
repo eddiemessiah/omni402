@@ -1,15 +1,24 @@
 [
   {
-    "name": "Chuck Norris Jokes",
-    "upstream": "https://api.chucknorris.io",
+    "name": "Celo Token Prices",
+    "upstream": "https://api.coingecko.com/api/v3",
     "price": "0.001",
-    "sample": "/jokes/random"
+    "sample": "/simple/price?ids=celo,celo-dollar,celo-euro&vs_currencies=usd",
+    "description": "Live CELO / cUSD / cEUR prices from CoinGecko."
   },
   {
-    "name": "Etherscan",
+    "name": "Celo Onchain Data",
+    "upstream": "https://celo.blockscout.com/api",
+    "price": "0.002",
+    "sample": "/?module=stats&action=coinprice",
+    "description": "Celo mainnet chain data via Blockscout (balances, tokens, stats)."
+  },
+  {
+    "name": "Etherscan Multichain",
     "upstream": "https://api.etherscan.io/v2/api",
     "price": "0.01",
     "query": "apikey=${ETHERSCAN_KEY}",
-    "sample": "/?chainid=1&module=stats&action=ethprice"
+    "sample": "/?chainid=42220&module=stats&action=ethprice",
+    "description": "On-chain data across EVM chains incl. Celo (chainid 42220)."
   }
 ]

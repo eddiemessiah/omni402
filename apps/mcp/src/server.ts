@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * GlassCelo402 MCP server — makes an AI agent a paying customer.
+ * Omni402 MCP server — makes an AI agent a paying customer.
  *
  * Exposes two tools over stdio:
  *   list_paid_apis  — discover what's for sale (name, price, URL)

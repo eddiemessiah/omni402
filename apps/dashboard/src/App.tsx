@@ -15,7 +15,7 @@ export function App() {
         <div className="brand">
           <span className="logo">◇</span>
           <div>
-            <div className="brand-name">GlassCelo402</div>
+            <div className="brand-name">Omni402</div>
             <div className="brand-sub">x402 control tower · Celo</div>
           </div>
         </div>

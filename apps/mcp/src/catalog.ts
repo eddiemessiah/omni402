@@ -27,6 +27,7 @@ interface Lane {
   sample?: string;
   asset?: string;
   method?: string;
+  description?: string;
 }
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -53,7 +54,9 @@ export function loadCatalog(): PaidApi[] {
       price: lane.price,
       asset: (lane.asset || network.defaultAsset).toUpperCase(),
       network: network.key,
-      description: `${lane.name}: proxied from ${new URL(lane.upstream).host}, paid per call.`,
+      description:
+        lane.description ||
+        `${lane.name}: proxied from ${new URL(lane.upstream).host}, paid per call.`,
       url: `${base}/pay/${slug}${sample}`,
       method: (lane.method || "GET").toUpperCase(),
     };

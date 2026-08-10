@@ -6,13 +6,16 @@ import express, { type Express } from "express";
 import { WebSocketServer, WebSocket } from "ws";
 import type { GatewayEvent } from "@glasscelo/x402ify";
 import { Store } from "./store.js";
+import { renderPayLanding, type LaneMeta } from "./landing.js";
 
 export interface Hub {
   store: Store;
   /** Feed an event in-process (used when the hub runs the gateways itself). */
   publish(e: GatewayEvent): void;
   /** Mount a lane's gateway under /pay/<slug> on the hub's public port. */
-  mountLane(slug: string, laneApp: Express): void;
+  mountLane(slug: string, laneApp: Express, meta: LaneMeta): void;
+  /** Call once after all lanes are mounted: adds the /pay index and a 404. */
+  finalizeLanes(network: string): void;
   listen(port: number): Promise<{ url: string; server: Server }>;
 }
 
@@ -43,6 +46,7 @@ export function createHub(): Hub {
   // the gateways, not the dashboard fallback. Lanes are added after boot; an
   // Express Router matches its sub-routes at request time, so that's fine.
   const laneRouter = express.Router();
+  const lanes: LaneMeta[] = [];
   app.use("/pay", laneRouter);
 
   // JSON parsing is scoped to /events ONLY — a global parser would swallow the
@@ -84,8 +88,23 @@ export function createHub(): Hub {
   return {
     store,
     publish,
-    mountLane(slug: string, laneApp: Express) {
+    mountLane(slug: string, laneApp: Express, meta: LaneMeta) {
       laneRouter.use(`/${slug}`, laneApp);
+      lanes.push(meta);
+    },
+    finalizeLanes(network: string) {
+      // The /pay index — a branded catalog of live endpoints.
+      laneRouter.get("/", (req, res) => {
+        const base = `${req.protocol}://${req.get("host")}`;
+        res.type("html").send(renderPayLanding(lanes, base, network));
+      });
+      // Anything else under /pay is an unknown lane → clean 404 (not the SPA).
+      laneRouter.use((_req, res) => {
+        res.status(404).json({
+          error: "no such lane",
+          hint: "GET /pay for the catalog of live endpoints",
+        });
+      });
     },
     listen(port: number) {
       return new Promise((resolve) => {
