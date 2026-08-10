@@ -1,0 +1,17 @@
+{
+  "type": "Agent",
+  "name": "Omni402 Agent",
+  "description": "Autonomous agent that turns any HTTP API into a pay-per-call x402/MPP endpoint on Celo and pays them per call in USDC — no accounts, no keys, no gas. Discovers endpoints and settles payments through the Celo x402 facilitator.",
+  "endpoints": [
+    {
+      "type": "mcp",
+      "url": "https://github.com/eddiemessiah/omni402"
+    },
+    {
+      "type": "wallet",
+      "address": "0x20ECAe56e1c21a0d4079bDD0202D0fb6d1FD5000",
+      "chainId": 42220
+    }
+  ],
+  "supportedTrust": ["reputation"]
+}
