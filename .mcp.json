@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "glasscelo402": {
+    "omni402": {
       "command": "node",
       "args": ["--import", "tsx", "apps/mcp/src/server.ts"],
       "env": {

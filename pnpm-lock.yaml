@@ -42,10 +42,10 @@ importers:
 
   apps/hub:
     dependencies:
-      '@glasscelo/config':
+      '@omni402/config':
         specifier: workspace:*
         version: link:../../packages/config
-      '@glasscelo/x402ify':
+      '@omni402/x402ify':
         specifier: workspace:*
         version: link:../../packages/x402ify
       express:
@@ -73,10 +73,10 @@ importers:
 
   apps/mcp:
     dependencies:
-      '@glasscelo/config':
+      '@omni402/config':
         specifier: workspace:*
         version: link:../../packages/config
-      '@glasscelo/x402ify':
+      '@omni402/x402ify':
         specifier: workspace:*
         version: link:../../packages/x402ify
       '@modelcontextprotocol/sdk':
@@ -110,7 +110,7 @@ importers:
 
   packages/x402ify:
     dependencies:
-      '@glasscelo/config':
+      '@omni402/config':
         specifier: workspace:*
         version: link:../config
       express:

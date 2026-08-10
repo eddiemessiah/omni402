@@ -1,4 +1,4 @@
-import { BRAND } from "@glasscelo/config";
+import { BRAND } from "@omni402/config";
 
 export interface LaneMeta {
   slug: string;

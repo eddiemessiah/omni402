@@ -6,7 +6,7 @@ import {
   getAsset,
   explorerTx,
   type NetworkConfig,
-} from "@glasscelo/config";
+} from "@omni402/config";
 
 /**
  * The buyer/agent side of MPP. `createBuyer` registers an EVM charge method

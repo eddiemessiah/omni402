@@ -1,7 +1,7 @@
 /**
  * Smoke test: does an unpaid request get a correct x402 402 challenge?
  * No chain, no funds — just verifies the gateway wiring and PaymentRequirements.
- * Run: pnpm --filter @glasscelo/x402ify exec tsx test/challenge.smoke.ts
+ * Run: pnpm --filter @omni402/x402ify exec tsx test/challenge.smoke.ts
  */
 import { wrap } from "../src/wrap.js";
 

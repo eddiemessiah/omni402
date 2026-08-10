@@ -1,6 +1,6 @@
 import { Mppx } from "mppx/server";
 import { evm, assets } from "mppx/evm/server";
-import type { NetworkConfig } from "@glasscelo/config";
+import type { NetworkConfig } from "@omni402/config";
 
 /**
  * MPP (Machine Payments Protocol) settlement via the `mppx` SDK, pinned to the

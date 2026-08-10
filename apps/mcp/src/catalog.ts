@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { getNetwork, slugify } from "@glasscelo/config";
+import { getNetwork, slugify } from "@omni402/config";
 
 /**
  * The market an agent can shop: each wrapped API, its price, and the exact URL
@@ -33,7 +33,7 @@ interface Lane {
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, "../../..");
 
-/** Public base the hub is reachable at, e.g. https://glasscelo402.up.railway.app */
+/** Public base the hub is reachable at, e.g. https://omni402.up.railway.app */
 function publicBase(): string {
   return (process.env.PUBLIC_BASE || "http://localhost:4021").replace(/\/$/, "");
 }

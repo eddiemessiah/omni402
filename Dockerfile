@@ -13,7 +13,7 @@ COPY lanes.json ./
 RUN pnpm install --frozen-lockfile
 
 # Build the dashboard to dist/ — the hub serves it as static files.
-RUN pnpm --filter @glasscelo/dashboard build
+RUN pnpm --filter @omni402/dashboard build
 
 ENV HUB_PORT=4021
 EXPOSE 4021

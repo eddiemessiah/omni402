@@ -72,7 +72,7 @@ URL and the payment happens transparently (sign EIP-3009 → retry).
 ```bash
 # BUYER_PRIVATE_KEY = a wallet with a little USDC and NO native gas
 # Lanes are served under /pay/<slug> on the hub's public port.
-pnpm --filter @glasscelo/x402ify exec tsx bin/buy.ts \
+pnpm --filter @omni402/x402ify exec tsx bin/buy.ts \
   http://localhost:4021/pay/chuck-norris-jokes/jokes/random --network celo-sepolia --max 0.10
 ```
 
@@ -80,7 +80,7 @@ It prints the response, the settlement tx hash, and the Celoscan receipt link.
 Programmatically:
 
 ```ts
-import { createBuyer } from "@glasscelo/x402ify";
+import { createBuyer } from "@omni402/x402ify";
 const buyer = createBuyer({ privateKey: process.env.BUYER_PRIVATE_KEY!, network: "celo" });
 const { status, body, reference } = await buyer.pay("https://your-api/premium");
 ```
@@ -93,7 +93,7 @@ Claude or GPT agent can shop the market on its own:
 - **`list_paid_apis`** — what's for sale: name, price per call, network, and the URL to pay.
 - **`paid_fetch`** — pay the per-call price and get the data back, with the settlement tx.
 
-Ask an agent something it can't answer for free ("get the ETH price, use glasscelo402") and it
+Ask an agent something it can't answer for free ("get the ETH price, use omni402") and it
 discovers the endpoint, pays USDC on Celo, and answers — the payment shows up live on the
 dashboard. The agent needs only `BUYER_PRIVATE_KEY` (a wallet with a little USDC, no gas); set it
 in the environment before launching the MCP server. Discovery is free — only `paid_fetch` spends.
@@ -111,13 +111,13 @@ Add an entry to [`lanes.json`](./lanes.json) and put any key in `.env`. A lane w
 
 ```bash
 # Docker (Railway / Render / Fly / any host)
-docker build -t glasscelo402 .
-docker run -p 4021:4021 --env-file .env glasscelo402
+docker build -t omni402 .
+docker run -p 4021:4021 --env-file .env omni402
 ```
 
 Set the same variables as `.env` in your host's dashboard (do **not** set `PORT` —
 the host injects it). Keep `MPP_SECRET_KEY` stable across redeploys. Set
-`PUBLIC_BASE` to your public URL (e.g. `https://glasscelo402.up.railway.app`) so
+`PUBLIC_BASE` to your public URL (e.g. `https://omni402.up.railway.app`) so
 the MCP catalog advertises payable URLs correctly.
 
 **Publicly payable:** every lane is served at `<public-base>/pay/<slug>` on the

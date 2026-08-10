@@ -1,5 +1,5 @@
 {
-  "name": "@glasscelo/config",
+  "name": "@omni402/config",
   "version": "0.1.0",
   "description": "Single source of truth for Celo x402 networks, assets, and the facilitator.",
   "type": "module",

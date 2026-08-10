@@ -4,7 +4,7 @@ import path from "node:path";
 import fs from "node:fs";
 import express, { type Express } from "express";
 import { WebSocketServer, WebSocket } from "ws";
-import type { GatewayEvent } from "@glasscelo/x402ify";
+import type { GatewayEvent } from "@omni402/x402ify";
 import { Store } from "./store.js";
 import { renderPayLanding, type LaneMeta } from "./landing.js";
 

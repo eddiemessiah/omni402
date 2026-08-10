@@ -1,5 +1,5 @@
-import type { GatewayEvent } from "@glasscelo/x402ify";
-import { NETWORKS, type NetworkKey } from "@glasscelo/config";
+import type { GatewayEvent } from "@omni402/x402ify";
+import { NETWORKS, type NetworkKey } from "@omni402/config";
 
 /**
  * In-memory aggregator for gateway events. Everything the dashboard shows is

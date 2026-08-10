@@ -1,5 +1,5 @@
-import type { GatewayEvent } from "@glasscelo/x402ify";
-import { NETWORKS, type NetworkKey, explorerTx } from "@glasscelo/config";
+import type { GatewayEvent } from "@omni402/x402ify";
+import { NETWORKS, type NetworkKey, explorerTx } from "@omni402/config";
 
 /**
  * Synthesizes realistic-looking traffic so the dashboard can be demoed without

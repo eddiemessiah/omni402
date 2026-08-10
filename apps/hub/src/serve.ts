@@ -8,8 +8,8 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { wrap } from "@glasscelo/x402ify";
-import { getNetwork, slugify, BRAND } from "@glasscelo/config";
+import { wrap } from "@omni402/x402ify";
+import { getNetwork, slugify, BRAND } from "@omni402/config";
 import { createHub } from "./hub.js";
 import { startDemo } from "./demo.js";
 

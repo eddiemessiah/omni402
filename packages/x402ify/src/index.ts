@@ -1,5 +1,5 @@
 /**
- * @glasscelo/x402ify — public API.
+ * @omni402/x402ify — public API.
  *
  * `wrap()` turns any HTTP API into an x402 pay-per-call endpoint settled on
  * Celo. The upstream key never leaves this process: the gateway injects it

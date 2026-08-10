@@ -1,5 +1,5 @@
 {
-  "name": "@glasscelo/hub",
+  "name": "@omni402/hub",
   "version": "0.1.0",
   "description": "Event hub + analytics + dashboard host for x402ify gateways on Celo.",
   "type": "module",
@@ -9,8 +9,8 @@
     "test": "tsx test/store.smoke.ts"
   },
   "dependencies": {
-    "@glasscelo/config": "workspace:*",
-    "@glasscelo/x402ify": "workspace:*",
+    "@omni402/config": "workspace:*",
+    "@omni402/x402ify": "workspace:*",
     "express": "^4.21.2",
     "ws": "^8.18.0"
   },

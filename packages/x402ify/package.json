@@ -1,5 +1,5 @@
 {
-  "name": "@glasscelo/x402ify",
+  "name": "@omni402/x402ify",
   "version": "0.1.0",
   "description": "Turn any HTTP API into an x402 pay-per-call endpoint, settled in stablecoins on Celo.",
   "type": "module",
@@ -18,7 +18,7 @@
     "build": "tsc -b"
   },
   "dependencies": {
-    "@glasscelo/config": "workspace:*",
+    "@omni402/config": "workspace:*",
     "express": "^4.21.2",
     "mppx": "0.8.7",
     "viem": "^2.21.0",

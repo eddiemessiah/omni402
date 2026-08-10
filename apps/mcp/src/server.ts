@@ -14,10 +14,10 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
-import { createBuyer, type Buyer } from "@glasscelo/x402ify";
+import { createBuyer, type Buyer } from "@omni402/x402ify";
 import { loadCatalog, findApi } from "./catalog.js";
 
-const server = new McpServer({ name: "glasscelo402", version: "0.1.0" });
+const server = new McpServer({ name: "omni402", version: "0.1.0" });
 
 // The buyer wallet is created lazily so `list_paid_apis` works even before a
 // key is configured (discovery is free; only paying needs the wallet).
@@ -143,4 +143,4 @@ server.registerTool(
 
 const transport = new StdioServerTransport();
 await server.connect(transport);
-console.error("glasscelo402 MCP server ready (stdio).");
+console.error("omni402 MCP server ready (stdio).");

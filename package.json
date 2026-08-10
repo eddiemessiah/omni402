@@ -9,7 +9,7 @@
   },
   "type": "module",
   "scripts": {
-    "build": "pnpm --filter @glasscelo/dashboard build",
+    "build": "pnpm --filter @omni402/dashboard build",
     "start": "node --import tsx apps/hub/src/serve.ts",
     "hub": "node --import tsx apps/hub/src/serve.ts",
     "wrap": "node --import tsx packages/x402ify/bin/x402ify.ts",

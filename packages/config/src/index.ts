@@ -1,5 +1,5 @@
 /**
- * @glasscelo/config
+ * @omni402/config
  * ------------------------------------------------------------------
  * Every Celo-specific value the rest of the monorepo needs lives here,
  * so switching networks or assets is a one-line change, not a hunt.

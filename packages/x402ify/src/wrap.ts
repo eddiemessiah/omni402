@@ -7,7 +7,7 @@ import {
   explorerTx,
   type NetworkConfig,
   type AssetConfig,
-} from "@glasscelo/config";
+} from "@omni402/config";
 import { CeloFacilitator } from "./facilitator.js";
 import { createMppSettler, mppConfigured, type MppSettler } from "./mpp.js";
 import type { GatewayEvent, PaymentRequirements } from "./types.js";
