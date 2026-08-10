@@ -40,7 +40,8 @@ function interpolate(spec: string | undefined): string | null | undefined {
 }
 
 async function main(): Promise<void> {
-  const hubPort = Number(process.env.HUB_PORT || 4021);
+  // Railway/Render/Fly inject PORT; fall back to HUB_PORT, then 4021.
+  const hubPort = Number(process.env.PORT || process.env.HUB_PORT || 4021);
   const wallet =
     process.env.SELLER_PAY_TO ||
     process.env.WALLET ||
