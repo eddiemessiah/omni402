@@ -6,7 +6,7 @@ RUN corepack enable
 WORKDIR /app
 
 # Install deps first (better layer caching). Copy manifests + lockfile.
-COPY pnpm-workspace.yaml package.json pnpm-lock.yaml tsconfig.base.json .npmrc ./
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml tsconfig.base.json ./
 COPY packages ./packages
 COPY apps ./apps
 COPY lanes.json ./
