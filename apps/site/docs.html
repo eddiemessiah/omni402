@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Omni402 docs - for humans, agents, and everyone in between</title>
+<meta name="description" content="How to sell an API, how an agent pays for one, and how to wire Omni402 into an MCP client. Settled in USDC on Celo."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --paper:#f3f1ea; --paper-2:#eae6db; --ink:#0e0e0d; --ink-2:#2b2a27; --muted:#6b675e;
+    --orange:#ff5a1f; --line:rgba(14,14,13,.14); --black:#0b0b0a; --green:#12b76a;
+    --disp:'Archivo',system-ui,sans-serif; --mono:'Space Mono',ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--disp);line-height:1.6;
+    -webkit-font-smoothing:antialiased;overflow-x:clip}
+  a{color:inherit}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 22px}
+
+  nav{position:sticky;top:0;z-index:60;background:rgba(243,241,234,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:60px;gap:12px}
+  .logo{font-weight:900;font-size:19px;letter-spacing:-.02em;display:flex;align-items:center;gap:8px;text-decoration:none;white-space:nowrap}
+  .logo .d{color:var(--orange);font-size:15px}
+  .nlinks{display:flex;gap:20px;font-family:var(--mono);font-size:12.5px;color:var(--ink-2);text-transform:lowercase;align-items:center}
+  .nlinks a{text-decoration:none} .nlinks a:hover{color:var(--orange)}
+  .nlinks a.on{color:var(--orange)}
+
+  /* header */
+  .dhead{padding:52px 0 30px;border-bottom:1px solid var(--line)}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.15em;text-transform:uppercase;color:var(--orange);
+    display:flex;gap:9px;align-items:center}
+  .eyebrow::before{content:"";width:24px;height:2px;background:var(--orange);flex:none}
+  h1{font-weight:900;font-size:clamp(34px,6.4vw,68px);line-height:.94;letter-spacing:-.03em;text-transform:uppercase;margin:14px 0 0}
+  h1 .o{color:var(--orange)}
+  .dsub{font-size:17.5px;color:var(--ink-2);max-width:62ch;margin:16px 0 0;font-weight:500}
+
+  /* layout */
+  .cols{display:grid;grid-template-columns:216px 1fr;gap:44px;padding:38px 0 80px;align-items:start}
+  .cols>*{min-width:0}
+  @media(max-width:900px){.cols{grid-template-columns:1fr;gap:22px}}
+  aside{position:sticky;top:76px}
+  @media(max-width:900px){aside{position:static;border:1px solid var(--ink);padding:16px;background:var(--paper-2)}}
+  aside .t{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+  aside ol{list-style:none;margin:0;padding:0;counter-reset:s}
+  aside li{margin:0 0 2px}
+  aside a{display:block;padding:6px 0;font-size:14px;font-weight:600;text-decoration:none;color:var(--ink-2);border-left:2px solid transparent;padding-left:11px}
+  aside a:hover{color:var(--orange)}
+  aside a.on{color:var(--ink);border-left-color:var(--orange)}
+
+  article section{padding:0 0 46px;scroll-margin-top:78px}
+  article h2{font-weight:900;font-size:clamp(24px,3.4vw,36px);line-height:1.05;letter-spacing:-.02em;margin:0 0 6px}
+  article h3{font-weight:800;font-size:19px;margin:26px 0 6px}
+  article p{color:var(--ink-2);max-width:66ch;margin:12px 0 0}
+  article ul{color:var(--ink-2);max-width:66ch;padding-left:20px}
+  article li{margin:7px 0}
+  article li::marker{color:var(--orange)}
+  .sidelabel{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--orange)}
+  strong{color:var(--ink)}
+
+  pre{background:var(--ink);color:#eee;font-family:var(--mono);font-size:12.5px;line-height:1.75;padding:15px 16px;
+    overflow-x:auto;margin:14px 0 0;max-width:100%}
+  pre .g{color:var(--orange)} pre .c{color:#8f8c84} pre .w{color:#fff}
+  code{font-family:var(--mono);font-size:.92em;background:var(--paper-2);border:1px solid var(--line);padding:1px 5px}
+  pre code{background:none;border:0;padding:0;font-size:inherit}
+
+  .callout{border-left:3px solid var(--orange);background:var(--paper-2);padding:14px 16px;margin:18px 0 0;max-width:66ch}
+  .callout .k{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--orange)}
+  .callout p{margin:5px 0 0}
+
+  .tbl{width:100%;border-collapse:collapse;margin:16px 0 0;font-size:14px;display:block;overflow-x:auto}
+  .tbl th{text-align:left;font-family:var(--mono);font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);
+    padding:9px 12px;border-bottom:1px solid var(--ink);white-space:nowrap}
+  .tbl td{padding:11px 12px;border-bottom:1px solid var(--line);color:var(--ink-2);vertical-align:top}
+  .tbl td code{white-space:nowrap}
+
+  .cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:22px 0 0}
+  @media(max-width:820px){.cards{grid-template-columns:1fr}}
+  .card{border:1px solid var(--ink);padding:20px;background:var(--paper-2);text-decoration:none;display:block;transition:transform .16s,background .16s}
+  .card:hover{transform:translateY(-3px);background:#fff}
+  .card .k{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--orange)}
+  .card h3{font-weight:800;font-size:19px;margin:8px 0 4px}
+  .card p{font-size:14px;color:var(--muted);margin:0}
+
+  footer{border-top:2px solid var(--ink);padding:26px 0 46px}
+  .foot-in{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:center;font-family:var(--mono);font-size:12.5px;color:var(--muted)}
+  .foot-in a{color:var(--ink);text-decoration:none} .foot-in a:hover{color:var(--orange)}
+  .foot-in strong{color:var(--ink)}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap nav-in">
+  <a class="logo" href="/"><span class="d">&#9671;</span>OMNI402</a>
+  <div class="nlinks">
+    <a href="/">home</a>
+    <a class="on" href="/docs.html">docs</a>
+    <a href="https://8004scan.io/agents/celo/9765" target="_blank" rel="noreferrer">agent &#8599;</a>
+    <a href="https://github.com/eddiemessiah/omni402" target="_blank" rel="noreferrer">github &#8599;</a>
+  </div>
+</div></nav>
+
+<header class="wrap dhead">
+  <div class="eyebrow">Documentation</div>
+  <h1>How to use <span class="o">Omni402</span></h1>
+  <p class="dsub">Omni402 turns any HTTP API into a pay-per-call endpoint on Celo. This page covers all three ways in: selling an API as a human, buying one as an agent, and wiring the marketplace into an MCP client.</p>
+  <div class="cards">
+    <a class="card" href="#sell">
+      <div class="k">For humans</div><h3>Sell an API</h3>
+      <p>Wrap any API in one command and get paid per call in USDC.</p>
+    </a>
+    <a class="card" href="#buy">
+      <div class="k">For agents</div><h3>Pay for a call</h3>
+      <p>A wallet-native client that answers 402 challenges automatically.</p>
+    </a>
+    <a class="card" href="#mcp">
+      <div class="k">For AI clients</div><h3>Use the MCP server</h3>
+      <p>Let Claude or GPT discover the market and buy on its own.</p>
+    </a>
+  </div>
+</header>
+
+<div class="wrap cols">
+  <aside>
+    <div class="t">On this page</div>
+    <ol id="toc">
+      <li><a href="#concepts">Core concepts</a></li>
+      <li><a href="#install">Install and configure</a></li>
+      <li><a href="#sell">Sell an API</a></li>
+      <li><a href="#buy">Buy as an agent</a></li>
+      <li><a href="#mcp">The MCP server</a></li>
+      <li><a href="#identity">Agent identity (ERC-8004)</a></li>
+      <li><a href="#dashboard">Dashboard and endpoints</a></li>
+      <li><a href="#env">Environment reference</a></li>
+      <li><a href="#deploy">Deploy it</a></li>
+      <li><a href="#faq">Troubleshooting</a></li>
+    </ol>
+  </aside>
+
+  <article>
+    <section id="concepts">
+      <span class="sidelabel">01</span>
+      <h2>Core concepts</h2>
+      <p>Omni402 has two sides and one settlement layer. Everything else is detail.</p>
+      <ul>
+        <li><strong>The gateway (<code>x402ify</code>)</strong> sits in front of an API you already have access to. Unpaid requests get an HTTP <code>402</code> naming the price. Paid requests are proxied upstream with your key injected server-side.</li>
+        <li><strong>The buyer</strong> is a wallet. It answers the <code>402</code> by signing an EIP-3009 authorization and retrying. No account, no API key.</li>
+        <li><strong>The facilitator</strong> is Celo's hosted x402/MPP service. It verifies the signature, submits the transfer on-chain, and pays the gas. It never custodies funds: USDC moves buyer to seller inside the token contract.</li>
+      </ul>
+      <div class="callout">
+        <div class="k">Why this matters</div>
+        <p>Your upstream API key never leaves your machine, and no private key is needed on the server. The buyer signs; the facilitator settles.</p>
+      </div>
+      <h3>The request lifecycle</h3>
+<pre><code><span class="c">1.</span> agent  &#8594; GET /pay/celo-token-prices          <span class="c">(no payment)</span>
+<span class="c">2.</span> server &#8594; 402 Payment Required + price in USDC
+<span class="c">3.</span> agent  &#8594; signs EIP-3009 authorization        <span class="c">(off-chain, no gas)</span>
+<span class="c">4.</span> agent  &#8594; retries with the credential attached
+<span class="c">5.</span> server &#8594; facilitator settles on Celo
+<span class="c">6.</span> server &#8594; 200 OK + data + Payment-Receipt <span class="c">(tx hash)</span></code></pre>
+    </section>
+
+    <section id="install">
+      <span class="sidelabel">02</span>
+      <h2>Install and configure</h2>
+      <p>Node 20 or newer, and pnpm. Clone the repo and install:</p>
+<pre><code><span class="g">git clone</span> https://github.com/eddiemessiah/omni402
+<span class="g">cd</span> omni402
+<span class="g">pnpm</span> install
+<span class="g">cp</span> .env.example .env</code></pre>
+      <p>To settle real payments you need two secrets in <code>.env</code>: a facilitator API key and an MPP server secret. Create the API key once at <a href="https://x402.celo.org" target="_blank" rel="noreferrer">x402.celo.org</a> (connect a wallet, click Create API key). Generate the server secret locally:</p>
+<pre><code><span class="g">openssl</span> rand -base64 32</code></pre>
+      <div class="callout">
+        <div class="k">Without those two values</div>
+        <p>The gateway still runs and serves a correct <code>402</code> challenge, but it cannot settle. That is <strong>challenge-only mode</strong>, which is useful for local development and tests.</p>
+      </div>
+      <p>Develop on Celo Sepolia first by setting <code>X402_NETWORK=celo-sepolia</code>. Testnet USDC comes from <a href="https://faucet.circle.com" target="_blank" rel="noreferrer">faucet.circle.com</a>. Switch to <code>celo</code> only when you want real money to move.</p>
+    </section>
+
+    <section id="sell">
+      <span class="sidelabel">03</span>
+      <h2>Sell an API (for humans)</h2>
+      <p>The fastest path. Point the wrapper at any API, set a price, and give it the wallet that should receive the money:</p>
+<pre><code><span class="g">pnpm</span> wrap https://api.coingecko.com/api/v3 \
+  --price 0.001 \
+  --wallet 0xYourReceivingWallet \
+  --sample <span class="w">"/simple/price?ids=celo&amp;vs_currencies=usd"</span></code></pre>
+      <p>If the upstream needs a key, pass it and the gateway injects it only after a payment settles. It never reaches the buyer:</p>
+<pre><code><span class="c"># as a query parameter</span>
+<span class="g">pnpm</span> wrap https://api.etherscan.io/v2/api --price 0.01 \
+  --wallet 0xYourWallet --query <span class="w">"apikey=$ETHERSCAN_KEY"</span>
+
+<span class="c"># or as a header</span>
+<span class="g">pnpm</span> wrap https://api.example.com --price 0.01 \
+  --wallet 0xYourWallet --header <span class="w">"Api-Key: $SECRET"</span></code></pre>
+      <h3>Selling several APIs at once</h3>
+      <p>Add an entry to <code>lanes.json</code> and the hub serves it at <code>/pay/&lt;slug&gt;</code> on one public port, alongside the dashboard. A lane whose key is missing is skipped with a warning rather than started, so a buyer is never charged for a call that cannot succeed.</p>
+<pre><code>{
+  <span class="w">"name"</span>: "Celo Token Prices",
+  <span class="w">"upstream"</span>: "https://api.coingecko.com/api/v3",
+  <span class="w">"price"</span>: "0.001",
+  <span class="w">"asset"</span>: "USDC",
+  <span class="w">"sample"</span>: "/simple/price?ids=celo&amp;vs_currencies=usd",
+  <span class="w">"description"</span>: "Live CELO / cUSD / cEUR prices."
+}</code></pre>
+      <p>Then start everything with one command:</p>
+<pre><code><span class="g">pnpm</span> build   <span class="c"># build the dashboard once</span>
+<span class="g">pnpm</span> hub     <span class="c"># hub + all lanes + dashboard on :4021</span></code></pre>
+      <p>The startup banner tells you which mode you are in. Look for <code>settlement MPP live</code> before expecting real payments.</p>
+    </section>
+
+    <section id="buy">
+      <span class="sidelabel">04</span>
+      <h2>Buy as an agent</h2>
+      <p>The buyer needs a wallet holding a little USDC and <strong>no native gas</strong>, because the facilitator sponsors settlement. From the command line:</p>
+<pre><code><span class="g">BUYER_PRIVATE_KEY</span>=0x… <span class="g">pnpm</span> --filter @omni402/x402ify exec tsx bin/buy.ts \
+  <span class="w">"http://localhost:4021/pay/celo-token-prices/simple/price?ids=celo&amp;vs_currencies=usd"</span> \
+  --network celo --max 0.01</code></pre>
+      <p>It prints the response, the settlement transaction hash, and a Celoscan receipt link. Programmatically, <code>createBuyer</code> patches <code>fetch</code> so any gated URL is paid transparently:</p>
+<pre><code><span class="g">import</span> { createBuyer } <span class="g">from</span> <span class="w">"@omni402/x402ify"</span>;
+
+<span class="g">const</span> buyer = createBuyer({
+  privateKey: process.env.BUYER_PRIVATE_KEY,
+  network: <span class="w">"celo"</span>,
+  maxAmount: <span class="w">"1"</span>            <span class="c">// never pay more than 1 USDC per call</span>
+});
+
+<span class="g">const</span> { status, body, reference } = <span class="g">await</span> buyer.pay(<span class="w">"https://your-api/premium"</span>);
+console.log(status, reference); <span class="c">// 200, 0x… settlement tx</span></code></pre>
+      <h3>The autonomous agent</h3>
+      <p>The repo ships a buyer that runs on a loop, picking endpoints from the catalog and paying for them. Every tick is a real x402 settlement on Celo.</p>
+<pre><code><span class="g">BUYER_PRIVATE_KEY</span>=0x… <span class="g">X402_NETWORK</span>=celo \
+<span class="g">PUBLIC_BASE</span>=https://your-app.up.railway.app \
+<span class="g">pnpm</span> agent</code></pre>
+      <div class="callout">
+        <div class="k">Use two wallets</div>
+        <p>Keep the buyer and the seller separate. If both sides are the same address the payment is a self-transfer and proves nothing. Fund a throwaway buyer with a few dollars of USDC.</p>
+      </div>
+    </section>
+
+    <section id="mcp">
+      <span class="sidelabel">05</span>
+      <h2>The MCP server</h2>
+      <p>This is what makes any AI assistant a paying customer. The server speaks the Model Context Protocol over stdio and exposes two tools:</p>
+      <table class="tbl">
+        <thead><tr><th>Tool</th><th>What it does</th><th>Costs money</th></tr></thead>
+        <tbody>
+          <tr><td><code>list_paid_apis</code></td><td>Returns the catalog: name, price per call, network, and the exact URL to pay.</td><td>No, discovery is free</td></tr>
+          <tr><td><code>paid_fetch</code></td><td>Pays the per-call price for an endpoint and returns the data plus the settlement transaction.</td><td>Yes, in USDC</td></tr>
+        </tbody>
+      </table>
+      <h3>Wiring it into a client</h3>
+      <p>The repo includes a <code>.mcp.json</code> that Claude Desktop, Claude Code, and other MCP clients can pick up. Point <code>PUBLIC_BASE</code> at wherever your hub is reachable:</p>
+<pre><code>{
+  <span class="w">"mcpServers"</span>: {
+    <span class="w">"omni402"</span>: {
+      <span class="w">"command"</span>: "node",
+      <span class="w">"args"</span>: ["--import", "tsx", "apps/mcp/src/server.ts"],
+      <span class="w">"env"</span>: {
+        <span class="w">"X402_NETWORK"</span>: "celo",
+        <span class="w">"PUBLIC_BASE"</span>: "https://your-app.up.railway.app",
+        <span class="w">"BUYER_PRIVATE_KEY"</span>: "0x…"
+      }
+    }
+  }
+}</code></pre>
+      <p>Or run it directly:</p>
+<pre><code><span class="g">BUYER_PRIVATE_KEY</span>=0x… <span class="g">X402_NETWORK</span>=celo <span class="g">pnpm</span> mcp</code></pre>
+      <h3>Talking to it</h3>
+      <p>Once connected, ask the assistant something it cannot answer for free. It will discover the endpoint, pay for it, and show you the receipt:</p>
+      <ul>
+        <li>"What paid APIs are available on Omni402?"</li>
+        <li>"Get me the current CELO price using omni402 and show the settlement transaction."</li>
+        <li>"Buy the on-chain data endpoint but never spend more than 0.01 USDC."</li>
+      </ul>
+      <div class="callout">
+        <div class="k">Safety</div>
+        <p><code>paid_fetch</code> accepts a <code>maxPrice</code> cap and refuses anything above it. Discovery costs nothing, so an assistant can browse the market before spending.</p>
+      </div>
+    </section>
+
+    <section id="identity">
+      <span class="sidelabel">06</span>
+      <h2>Agent identity (ERC-8004)</h2>
+      <p>Payments answer "can this agent pay". Identity answers "who is this agent". Omni402 registers an agent on Celo's ERC-8004 Identity Registry, which mints a portable NFT identity that is browsable and reputation-ready.</p>
+      <p>Publish a registration file describing your agent (the repo's <code>agent.json</code> is a working example), then register it. The signing wallet owns the identity and needs a little CELO for gas:</p>
+<pre><code><span class="g">AGENT_PRIVATE_KEY</span>=0x… <span class="g">X402_NETWORK</span>=celo \
+<span class="g">pnpm</span> register-8004 https://raw.githubusercontent.com/you/repo/main/agent.json</code></pre>
+      <p>It prints your agent ID, the transaction, and an 8004scan link. The reference agent for this project is <a href="https://8004scan.io/agents/celo/9765" target="_blank" rel="noreferrer">agent #9765</a>.</p>
+      <table class="tbl">
+        <thead><tr><th>Registry</th><th>Network</th><th>Address</th></tr></thead>
+        <tbody>
+          <tr><td>Identity</td><td>Celo mainnet</td><td><code>0x8004A169FB4a3325136EB29fA0ceB6D2e539a432</code></td></tr>
+          <tr><td>Identity</td><td>Celo Sepolia</td><td><code>0x8004A818BFB912233c491871b3d84c89A494BD9e</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="dashboard">
+      <span class="sidelabel">07</span>
+      <h2>Dashboard and endpoints</h2>
+      <p>The hub serves everything on a single port, so local and production run the identical code path.</p>
+      <table class="tbl">
+        <thead><tr><th>Path</th><th>What it serves</th></tr></thead>
+        <tbody>
+          <tr><td><code>/</code></td><td>The live dashboard: revenue, paid calls, per-API income, payments feed with explorer receipts, calls-by-hour.</td></tr>
+          <tr><td><code>/pay</code></td><td>A public catalog of every payable endpoint currently running.</td></tr>
+          <tr><td><code>/pay/&lt;slug&gt;</code></td><td>A payable API. Unpaid requests get a <code>402</code>; paid requests get the upstream response.</td></tr>
+          <tr><td><code>/api/state</code></td><td>JSON snapshot of all aggregated stats, which is what the dashboard renders.</td></tr>
+          <tr><td><code>/api/health</code></td><td>Liveness probe used by the container healthcheck.</td></tr>
+          <tr><td><code>/ws</code></td><td>WebSocket stream of payment and request events, pushed live to the dashboard.</td></tr>
+        </tbody>
+      </table>
+      <p>You can see the 402 for yourself without a wallet. This returns the payment requirements as JSON:</p>
+<pre><code><span class="g">curl</span> -i https://your-app.up.railway.app/pay/celo-token-prices</code></pre>
+    </section>
+
+    <section id="env">
+      <span class="sidelabel">08</span>
+      <h2>Environment reference</h2>
+      <table class="tbl">
+        <thead><tr><th>Variable</th><th>Needed for</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><code>X402_NETWORK</code></td><td>always</td><td><code>celo</code> for mainnet or <code>celo-sepolia</code> for testnet.</td></tr>
+          <tr><td><code>SELLER_PAY_TO</code></td><td>live settlement</td><td>The wallet that receives the USDC. No private key required.</td></tr>
+          <tr><td><code>MPP_SECRET_KEY</code></td><td>live settlement</td><td>Server secret that signs and verifies challenges and receipts. Keep it stable across redeploys.</td></tr>
+          <tr><td><code>X402_API_KEY</code></td><td>live settlement</td><td>Facilitator credits key from x402.celo.org, sent as <code>X-API-Key</code>.</td></tr>
+          <tr><td><code>PUBLIC_BASE</code></td><td>deployment</td><td>Your public URL, so the MCP catalog advertises payable URLs correctly.</td></tr>
+          <tr><td><code>BUYER_PRIVATE_KEY</code></td><td>buying only</td><td>The agent wallet that pays. Never put this on the seller.</td></tr>
+          <tr><td><code>PORT</code></td><td>hosts</td><td>Injected by Railway, Render, and Fly. Do not set it yourself.</td></tr>
+        </tbody>
+      </table>
+      <div class="callout">
+        <div class="k">Secrets</div>
+        <p><code>.env</code> is gitignored. Never commit a private key, and never paste one into a chat or an issue.</p>
+      </div>
+    </section>
+
+    <section id="deploy">
+      <span class="sidelabel">09</span>
+      <h2>Deploy it</h2>
+      <p>One container serves the dashboard, the API, the WebSocket, and every payable endpoint. Build it from the repository root:</p>
+<pre><code><span class="g">docker</span> build -t omni402 .
+<span class="g">docker</span> run -p 4021:4021 --env-file .env omni402</code></pre>
+      <p>On Railway, create <strong>one</strong> service from the repo with the root directory set to <code>/</code> so it uses the root <code>Dockerfile</code>. Set the same variables as <code>.env</code> plus <code>PUBLIC_BASE</code>, leave <code>PORT</code> alone, then generate a domain. The healthcheck at <code>/api/health</code> keeps traffic off a half-booted container.</p>
+      <div class="callout">
+        <div class="k">Do not split the monorepo</div>
+        <p>Railway may offer to create a service per package. Decline. The MCP server is a stdio process rather than a web service, and the dashboard is served by the hub, so a single container is correct.</p>
+      </div>
+    </section>
+
+    <section id="faq">
+      <span class="sidelabel">10</span>
+      <h2>Troubleshooting</h2>
+      <h3>The gateway returns 402 forever</h3>
+      <p>The buyer is not paying, or settlement is off. Check the startup banner: if it says <code>challenge-only</code>, then <code>X402_API_KEY</code> or <code>MPP_SECRET_KEY</code> is missing. Also confirm the payout address is a real address rather than the zero address.</p>
+      <h3>Settlement fails with an insufficient balance</h3>
+      <p>The buyer wallet needs <strong>USDC</strong>, not CELO. Gas is sponsored, but the payment itself is real money, so the balance has to cover the price.</p>
+      <h3>A lane did not start</h3>
+      <p>Its upstream key is missing. The hub skips such lanes deliberately, because a gateway with no upstream key would take the buyer's money and then fail.</p>
+      <h3>USDT signatures are rejected</h3>
+      <p>USDT has no on-chain <code>version()</code>, so its EIP-712 domain must be set explicitly to name <code>Tether USD</code> and version <code>1</code>. Omni402 pins this per asset already; the error usually means a custom asset was configured by hand.</p>
+      <h3>The unknown endpoint returns the landing page</h3>
+      <p>An unrecognized <code>/pay/&lt;slug&gt;</code> returns a JSON 404 with a hint. If you get HTML instead, the lane router did not initialize, which usually means the hub failed to read <code>lanes.json</code>.</p>
+    </section>
+  </article>
+</div>
+
+<footer><div class="wrap foot-in">
+  <div>Built by <strong>Edidiong Umana</strong> &#183; Celo Nigeria ambassador</div>
+  <div><a href="/">Home</a> &#183; <a href="https://github.com/eddiemessiah/omni402" target="_blank" rel="noreferrer">GitHub</a> &#183; <a href="https://8004scan.io/agents/celo/9765" target="_blank" rel="noreferrer">8004scan</a></div>
+</div></footer>
+
+<script>
+  /* highlight the section currently in view */
+  (function(){
+    var links = Array.prototype.slice.call(document.querySelectorAll('#toc a'));
+    var secs = links.map(function(a){ return document.querySelector(a.getAttribute('href')); }).filter(Boolean);
+    if(!('IntersectionObserver' in window) || !secs.length) return;
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(!e.isIntersecting) return;
+        links.forEach(function(l){ l.classList.remove('on'); });
+        var m = links.find(function(l){ return l.getAttribute('href') === '#' + e.target.id; });
+        if(m) m.classList.add('on');
+      });
+    }, { rootMargin: '-72px 0px -70% 0px', threshold: 0 });
+    secs.forEach(function(s){ io.observe(s); });
+  })();
+</script>
+</body>
+</html>
