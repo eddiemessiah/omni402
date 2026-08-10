@@ -15,6 +15,7 @@
     "wrap": "node --import tsx packages/x402ify/bin/x402ify.ts",
     "supported": "node --import tsx packages/config/src/probe.ts",
     "mcp": "node --import tsx apps/mcp/src/server.ts",
+    "agent": "node --import tsx apps/mcp/src/agent.ts",
     "test": "node --import tsx packages/x402ify/test/challenge.smoke.ts && node --import tsx packages/x402ify/test/mpp.smoke.ts && node --import tsx packages/x402ify/test/buyer.smoke.ts && node --import tsx apps/mcp/test/mcp.smoke.ts",
     "typecheck": "tsc -b --pretty"
   },

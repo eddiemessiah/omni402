@@ -4,7 +4,8 @@
   "description": "MCP server: let an AI agent discover and pay for x402/MPP APIs on Celo.",
   "type": "module",
   "bin": {
-    "omni402-mcp": "./src/server.ts"
+    "omni402-mcp": "./src/server.ts",
+    "omni-agent": "./src/agent.ts"
   },
   "scripts": {
     "start": "tsx src/server.ts",
