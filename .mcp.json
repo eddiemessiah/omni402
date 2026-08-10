@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "glasscelo402": {
+      "command": "node",
+      "args": ["--import", "tsx", "apps/mcp/src/server.ts"],
+      "env": {
+        "X402_NETWORK": "celo-sepolia",
+        "GATEWAY_BASE": "http://localhost"
+      }
+    }
+  }
+}

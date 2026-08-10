@@ -3,6 +3,7 @@
   "references": [
     { "path": "packages/config" },
     { "path": "packages/x402ify" },
-    { "path": "apps/hub" }
+    { "path": "apps/hub" },
+    { "path": "apps/mcp" }
   ]
 }

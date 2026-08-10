@@ -1,0 +1,24 @@
+{
+  "name": "@glasscelo/mcp",
+  "version": "0.1.0",
+  "description": "MCP server: let an AI agent discover and pay for x402/MPP APIs on Celo.",
+  "type": "module",
+  "bin": {
+    "glasscelo-mcp": "./src/server.ts"
+  },
+  "scripts": {
+    "start": "tsx src/server.ts",
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "@glasscelo/config": "workspace:*",
+    "@glasscelo/x402ify": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

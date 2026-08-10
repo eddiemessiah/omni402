@@ -84,6 +84,24 @@ const buyer = createBuyer({ privateKey: process.env.BUYER_PRIVATE_KEY!, network:
 const { status, body, reference } = await buyer.pay("https://your-api/premium");
 ```
 
+## Any AI agent as a paying customer (MCP)
+
+The repo ships an MCP server ([apps/mcp](./apps/mcp), wired in [`.mcp.json`](./.mcp.json)) so a
+Claude or GPT agent can shop the market on its own:
+
+- **`list_paid_apis`** — what's for sale: name, price per call, network, and the URL to pay.
+- **`paid_fetch`** — pay the per-call price and get the data back, with the settlement tx.
+
+Ask an agent something it can't answer for free ("get the ETH price, use glasscelo402") and it
+discovers the endpoint, pays USDC on Celo, and answers — the payment shows up live on the
+dashboard. The agent needs only `BUYER_PRIVATE_KEY` (a wallet with a little USDC, no gas); set it
+in the environment before launching the MCP server. Discovery is free — only `paid_fetch` spends.
+
+```bash
+# stdio server; your MCP client (Claude Desktop/Code) launches it via .mcp.json
+BUYER_PRIVATE_KEY=0x… X402_NETWORK=celo pnpm mcp
+```
+
 ## Add an API to sell
 
 Add an entry to [`lanes.json`](./lanes.json) and put any key in `.env`. A lane whose key is missing is skipped with a warning rather than started.
