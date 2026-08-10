@@ -185,6 +185,7 @@ export function wrap(opts: WrapOptions): Gateway {
     mpp = createMppSettler({
       network,
       recipient: opts.wallet,
+      assetSymbol: asset.symbol,
       secretKey: process.env.MPP_SECRET_KEY!,
       apiKey: process.env.X402_API_KEY!,
     });

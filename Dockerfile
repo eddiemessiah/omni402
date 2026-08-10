@@ -18,5 +18,9 @@ RUN pnpm --filter @glasscelo/dashboard build
 ENV HUB_PORT=4021
 EXPOSE 4021
 
+# Liveness: hit /api/health on the actual port (PORT on a host, else 4021).
+HEALTHCHECK --interval=30s --timeout=5s --start-period=25s --retries=3 \
+  CMD node -e "fetch('http://127.0.0.1:'+(process.env.PORT||process.env.HUB_PORT||4021)+'/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+
 # The hub boots the gateways from lanes.json and serves the dashboard.
 CMD ["node", "--import", "tsx", "apps/hub/src/serve.ts"]

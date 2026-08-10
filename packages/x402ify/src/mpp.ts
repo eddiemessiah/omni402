@@ -13,12 +13,33 @@ import type { NetworkConfig } from "@glasscelo/config";
  */
 export interface MppConfig {
   network: NetworkConfig;
-  /** The wallet that receives the USDC (seller payout). */
+  /** The wallet that receives the stablecoin (seller payout). */
   recipient: `0x${string}`;
+  /** Settlement asset symbol, pinned per lane: "USDC" | "USDT". */
+  assetSymbol: string;
   /** MPP server secret (>= 32 bytes). `openssl rand -base64 32`. */
   secretKey: string;
   /** Facilitator credits key from x402.celo.org, sent as X-API-Key. */
   apiKey: string;
+}
+
+/**
+ * Resolve the mppx known-asset for an exact (network, symbol) pair. Throws on
+ * combinations the facilitator can't settle rather than silently substituting a
+ * different token — this is money.
+ */
+function knownAsset(networkKey: string, symbol: string) {
+  const sym = symbol.toUpperCase();
+  if (networkKey === "celo") {
+    if (sym === "USDC") return assets.celo.USDC;
+    if (sym === "USDT") return assets.celo.USDT;
+  } else if (networkKey === "celo-sepolia") {
+    if (sym === "USDC") return assets.celoSepolia.USDC;
+  }
+  throw new Error(
+    `MPP settlement of ${sym} on ${networkKey} is not supported ` +
+      `(Celo mainnet: USDC or USDT; Celo Sepolia: USDC).`,
+  );
 }
 
 /** The subset of the mppx charge-result we consume. */
@@ -43,14 +64,14 @@ export function createMppSettler(cfg: MppConfig): MppSettler {
     return fetch(input, { ...init, headers });
   };
 
-  // Known Celo USDC asset per network — lets mppx infer chain id, decimals,
+  // The exact, pinned settlement asset — lets mppx infer chain id, decimals,
   // and the EIP-712 domain.
-  const usdc = cfg.network.key === "celo" ? assets.celo.USDC : assets.celoSepolia.USDC;
+  const currency = knownAsset(cfg.network.key, cfg.assetSymbol);
 
   const mppx = Mppx.create({
     methods: [
       evm.charge({
-        currency: usdc,
+        currency,
         recipient: cfg.recipient,
         x402: { facilitator: cfg.network.mppFacilitator, fetch: apiKeyFetch },
       }),
