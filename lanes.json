@@ -3,15 +3,13 @@
     "name": "Chuck Norris Jokes",
     "upstream": "https://api.chucknorris.io",
     "price": "0.001",
-    "sample": "/jokes/random",
-    "port": 4101
+    "sample": "/jokes/random"
   },
   {
     "name": "Etherscan",
     "upstream": "https://api.etherscan.io/v2/api",
     "price": "0.01",
     "query": "apikey=${ETHERSCAN_KEY}",
-    "sample": "/?chainid=1&module=stats&action=ethprice",
-    "port": 4102
+    "sample": "/?chainid=1&module=stats&action=ethprice"
   }
 ]

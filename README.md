@@ -71,8 +71,9 @@ URL and the payment happens transparently (sign EIP-3009 → retry).
 
 ```bash
 # BUYER_PRIVATE_KEY = a wallet with a little USDC and NO native gas
+# Lanes are served under /pay/<slug> on the hub's public port.
 pnpm --filter @glasscelo/x402ify exec tsx bin/buy.ts \
-  http://localhost:4100/ --network celo-sepolia --max 0.10
+  http://localhost:4021/pay/chuck-norris-jokes/jokes/random --network celo-sepolia --max 0.10
 ```
 
 It prints the response, the settlement tx hash, and the Celoscan receipt link.
@@ -114,7 +115,15 @@ docker build -t glasscelo402 .
 docker run -p 4021:4021 --env-file .env glasscelo402
 ```
 
-Set the same variables as `.env` in your host's dashboard. Keep `MPP_SECRET_KEY` stable across redeploys.
+Set the same variables as `.env` in your host's dashboard (do **not** set `PORT` —
+the host injects it). Keep `MPP_SECRET_KEY` stable across redeploys. Set
+`PUBLIC_BASE` to your public URL (e.g. `https://glasscelo402.up.railway.app`) so
+the MCP catalog advertises payable URLs correctly.
+
+**Publicly payable:** every lane is served at `<public-base>/pay/<slug>` on the
+one exposed port, so agents and the MCP server can pay your deployed endpoints
+directly — e.g. `https://your-app.up.railway.app/pay/etherscan/?chainid=1&…`.
+The dashboard, API, and WebSocket share the same port.
 
 ## Repo layout
 

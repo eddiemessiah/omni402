@@ -1,12 +1,13 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { getNetwork } from "@glasscelo/config";
+import { getNetwork, slugify } from "@glasscelo/config";
 
 /**
  * The market an agent can shop: each wrapped API, its price, and the exact URL
  * to pay. Built from lanes.json — the same file the hub uses to run gateways —
- * so what's for sale and what's actually running never drift apart.
+ * so what's for sale and what's actually running never drift apart. Lanes are
+ * served under /pay/<slug> on the hub's public base.
  */
 export interface PaidApi {
   name: string;
@@ -14,7 +15,7 @@ export interface PaidApi {
   asset: string;
   network: string;
   description: string;
-  /** Buyer-facing URL (gateway host + port + sample path). Pay this. */
+  /** Buyer-facing URL (public base + /pay/<slug> + sample). Pay this. */
   url: string;
   method: string;
 }
@@ -24,7 +25,6 @@ interface Lane {
   upstream: string;
   price: string;
   sample?: string;
-  port: number;
   asset?: string;
   method?: string;
 }
@@ -32,9 +32,9 @@ interface Lane {
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, "../../..");
 
-/** Base the gateways are reachable at (each lane on its own port). */
-function gatewayBase(): string {
-  return (process.env.GATEWAY_BASE || "http://localhost").replace(/\/$/, "");
+/** Public base the hub is reachable at, e.g. https://glasscelo402.up.railway.app */
+function publicBase(): string {
+  return (process.env.PUBLIC_BASE || "http://localhost:4021").replace(/\/$/, "");
 }
 
 export function loadCatalog(): PaidApi[] {
@@ -43,8 +43,10 @@ export function loadCatalog(): PaidApi[] {
   const lanesPath = path.join(REPO_ROOT, "lanes.json");
   if (!fs.existsSync(lanesPath)) return [];
   const lanes: Lane[] = JSON.parse(fs.readFileSync(lanesPath, "utf8"));
+  const base = publicBase();
 
   return lanes.map((lane) => {
+    const slug = slugify(lane.name);
     const sample = lane.sample && lane.sample !== "/" ? lane.sample : "";
     return {
       name: lane.name,
@@ -52,7 +54,7 @@ export function loadCatalog(): PaidApi[] {
       asset: (lane.asset || network.defaultAsset).toUpperCase(),
       network: network.key,
       description: `${lane.name}: proxied from ${new URL(lane.upstream).host}, paid per call.`,
-      url: `${gatewayBase()}:${lane.port}${sample}`,
+      url: `${base}/pay/${slug}${sample}`,
       method: (lane.method || "GET").toUpperCase(),
     };
   });

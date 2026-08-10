@@ -9,7 +9,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { wrap } from "@glasscelo/x402ify";
-import { getNetwork } from "@glasscelo/config";
+import { getNetwork, slugify } from "@glasscelo/config";
 import { createHub } from "./hub.js";
 import { startDemo } from "./demo.js";
 
@@ -18,7 +18,6 @@ interface Lane {
   upstream: string;
   price: string;
   sample?: string;
-  port: number;
   header?: string;
   query?: string;
   asset?: string;
@@ -72,14 +71,15 @@ async function main(): Promise<void> {
       wallet,
       network: networkKey,
       asset: lane.asset,
-      port: lane.port,
       name: lane.name,
       header: header ?? undefined,
       query: query ?? undefined,
       onEvent: hub.publish,
     });
-    await gateway.start();
-    started.push(`${lane.name} → :${lane.port} (${lane.price} ${gateway.asset.symbol})`);
+    // Mount on the hub's public port under /pay/<slug> instead of a private port.
+    const slug = slugify(lane.name);
+    hub.mountLane(slug, gateway.app);
+    started.push(`${lane.name} → /pay/${slug} (${lane.price} ${gateway.asset.symbol})`);
   }
 
   console.log(`\n  ● GlassCelo402 hub — ${network.name}`);

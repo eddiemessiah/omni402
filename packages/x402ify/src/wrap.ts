@@ -68,7 +68,9 @@ function buildTargetUrl(
   injected: { name: string; value: string } | null,
 ): URL {
   const base = new URL(upstream);
-  const caller = new URL(req.originalUrl, "http://placeholder");
+  // req.url is mount-relative (strips any /pay/<slug> prefix when the gateway is
+  // mounted on the hub); it equals originalUrl when the gateway runs standalone.
+  const caller = new URL(req.url, "http://placeholder");
   const callerPath = caller.pathname === "/" ? "" : caller.pathname;
   const basePath = base.pathname.replace(/\/$/, "");
   const target = new URL(base.origin + basePath + callerPath);
@@ -201,6 +203,9 @@ export function wrap(opts: WrapOptions): Gateway {
   });
 
   const app = express();
+  // Behind the hub/Railway proxy, honor X-Forwarded-* so req.protocol/host (and
+  // thus the x402 resource URL) reflect the real public URL.
+  app.set("trust proxy", true);
   app.use(express.raw({ type: () => true, limit: "5mb" }));
 
   app.all(/.*/, async (req, res) => {

@@ -160,6 +160,14 @@ export function explorerTx(network: NetworkConfig, txHash: string): string {
   return `${network.explorer}/tx/${txHash}`;
 }
 
+/** URL-safe slug for a lane name, e.g. "The Graph" → "the-graph". */
+export function slugify(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 /**
  * Ask the facilitator which (network, asset) pairs it actually settles today.
  * Authoritative and self-updating — prefer this over trusting hardcoded lists

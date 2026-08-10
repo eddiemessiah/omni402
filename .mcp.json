@@ -5,7 +5,7 @@
       "args": ["--import", "tsx", "apps/mcp/src/server.ts"],
       "env": {
         "X402_NETWORK": "celo-sepolia",
-        "GATEWAY_BASE": "http://localhost"
+        "PUBLIC_BASE": "http://localhost:4021"
       }
     }
   }

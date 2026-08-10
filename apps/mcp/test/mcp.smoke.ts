@@ -20,10 +20,11 @@ const check = (c: boolean, label: string) => {
 const transport = new StdioClientTransport({
   command: "node",
   args: ["--import", "tsx", serverEntry],
-  env: { ...process.env, X402_NETWORK: "celo-sepolia", GATEWAY_BASE: "http://localhost" } as Record<
-    string,
-    string
-  >,
+  env: {
+    ...process.env,
+    X402_NETWORK: "celo-sepolia",
+    PUBLIC_BASE: "http://localhost:4021",
+  } as Record<string, string>,
 });
 
 const client = new Client({ name: "smoke-agent", version: "0.0.1" });
@@ -43,7 +44,10 @@ try {
   console.log(`\n  --- list_paid_apis returned ---\n${text}\n`);
   check(/Chuck Norris Jokes/.test(text), "catalog includes the Chuck Norris lane");
   check(/USDC\/call/.test(text), "shows a per-call USDC price");
-  check(/http:\/\/localhost:4101/.test(text), "shows the buyer-facing gateway URL");
+  check(
+    /http:\/\/localhost:4021\/pay\/chuck-norris-jokes/.test(text),
+    "shows the public /pay/<slug> URL",
+  );
 } finally {
   await client.close();
 }
