@@ -7,3 +7,6 @@ node_modules
 *.log
 .pnpm-store
 apps/dashboard/dist
+# the video renderer is never part of the server image
+apps/video
+apps/site

@@ -1,6 +1,11 @@
 packages:
   - "packages/*"
   - "apps/*"
+  # The video renderer is a standalone tool: Remotion pulls a headless Chrome,
+  # which would bloat the deploy image and force a lockfile change that breaks
+  # `pnpm install --frozen-lockfile` in the Dockerfile. Install it on its own
+  # with: cd apps/video && pnpm install
+  - "!apps/video"
 
 # Approve install-time build scripts (pnpm 11). esbuild powers tsx/vite;
 # keccak/bufferutil/utf-8-validate back the eth signing + websocket stack.
