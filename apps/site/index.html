@@ -192,6 +192,22 @@
   .foot-in a{color:var(--ink)} .foot-in a:hover{color:var(--orange)}
   .foot-in strong{color:var(--ink)}
 
+  /* verified proof block */
+  .proof{margin-top:26px;border:2px solid var(--ink);background:var(--paper-2)}
+  .proof-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+    padding:13px 17px;border-bottom:1px solid var(--ink);font-family:var(--mono);font-size:11.5px;
+    letter-spacing:.07em;text-transform:uppercase}
+  .proof-top .ok{color:var(--green);font-weight:700;white-space:nowrap}
+  .proof-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line)}
+  @media(max-width:680px){.proof-grid{grid-template-columns:1fr}}
+  .pcell{background:var(--paper-2);padding:15px 17px}
+  .pcell .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+  .pcell .v{font-family:var(--mono);font-size:13px;margin-top:5px;word-break:break-all}
+  .pcell .v.hot{color:var(--orange);font-weight:700}
+  .proof-foot{padding:13px 17px;border-top:1px solid var(--ink);font-family:var(--mono);font-size:12px}
+  .proof-foot a{color:var(--orange);word-break:break-all}
+  .proof-foot a:hover{text-decoration:underline}
+
   .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s cubic-bezier(.16,1,.3,1)}
   .reveal.in{opacity:1;transform:none}
   .stagger>.reveal:nth-child(2){transition-delay:.08s}
@@ -229,7 +245,7 @@
     <p class="hsub">Wrap any HTTP API into a pay-per-call endpoint on Celo. Agents pay per request in USDC. No account. No key. No gas.</p>
     <div class="cta-row">
       <a class="btn btn-orange" href="/docs.html">Read the docs &#8594;</a>
-      <a class="btn btn-ink" href="#market">See it live</a>
+      <a class="btn btn-ink" href="https://omni402-production.up.railway.app" target="_blank" rel="noreferrer">Open the live gateway &#8599;</a>
     </div>
     <div class="term"><span class="g">$</span> <span class="w" id="typed"></span><span class="caret"></span></div>
   </div>
@@ -294,6 +310,29 @@
       <span class="live"><span class="d"></span> live &#183; celo</span>
     </div>
     <ul id="rows"></ul>
+  </div>
+
+  <div class="proof reveal">
+    <div class="proof-top">
+      <span>First settlement, decoded from the chain</span>
+      <span class="ok">&#10003; verified on Celo mainnet</span>
+    </div>
+    <div class="proof-grid">
+      <div class="pcell"><div class="k">Amount</div><div class="v hot">0.001000 USDC</div></div>
+      <div class="pcell"><div class="k">Block</div><div class="v">74,479,633</div></div>
+      <div class="pcell"><div class="k">Buyer agent</div><div class="v">0x4F43Cf9E7D0Cfe47185ac97BDa737217cEA3EDE3</div></div>
+      <div class="pcell"><div class="k">Seller</div><div class="v">0x20ECAe56e1c21a0d4079bDD0202D0fb6d1FD5000</div></div>
+      <div class="pcell"><div class="k">Authorization</div><div class="v">EIP-3009 AuthorizationUsed</div></div>
+      <div class="pcell"><div class="k">Gas paid by</div><div class="v hot">the facilitator, not the buyer</div></div>
+    </div>
+    <div class="proof-foot">
+      receipt &#8594; <a href="https://celoscan.io/tx/0xf6f71df2f84279c483b138a43c8adcfcd7c1e319459f2b1b2497cdb706a38b38" target="_blank" rel="noreferrer">celoscan.io/tx/0xf6f71df2&#8230;a38b38</a>
+    </div>
+  </div>
+
+  <div class="cta-row" style="margin-top:24px;animation:none;opacity:1">
+    <a class="btn btn-ink" href="https://omni402-production.up.railway.app/pay" target="_blank" rel="noreferrer">Browse payable endpoints &#8599;</a>
+    <a class="btn btn-ink" href="https://omni402-production.up.railway.app" target="_blank" rel="noreferrer">Open the dashboard &#8599;</a>
   </div>
 </div></section>
 
