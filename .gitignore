@@ -7,3 +7,5 @@ dist/
 *.log
 .pnpm-store/
 coverage/
+# runtime dashboard snapshots (kept local, or on a mounted volume in prod)
+data/

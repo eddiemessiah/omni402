@@ -110,7 +110,19 @@ async function main(): Promise<void> {
     console.log(`\n  ▸ DEMO mode: synthesizing payments into the dashboard`);
     startDemo(hub.publish, network.key);
   }
+  console.log(`    persistence ${hub.persistence.path}${hub.persistence.restored ? " (restored)" : ""}`);
   console.log("");
+
+  // Flush the debounce window on shutdown, so the last second's events are not
+  // lost. Both signals matter: SIGTERM is what Railway sends on redeploy;
+  // SIGINT is Ctrl-C in a local shell.
+  const shutdown = async (sig: string) => {
+    console.log(`\n  · ${sig} received, flushing persistence…`);
+    await hub.persistence.flush();
+    process.exit(0);
+  };
+  process.once("SIGTERM", () => void shutdown("SIGTERM"));
+  process.once("SIGINT", () => void shutdown("SIGINT"));
 }
 
 main().catch((err) => {

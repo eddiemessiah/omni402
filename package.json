@@ -17,7 +17,7 @@
     "mcp": "node --env-file-if-exists=.env --import tsx apps/mcp/src/server.ts",
     "agent": "node --env-file-if-exists=.env --import tsx apps/mcp/src/agent.ts",
     "register-8004": "node --env-file-if-exists=.env --import tsx packages/x402ify/bin/register-8004.ts",
-    "test": "node --import tsx packages/x402ify/test/challenge.smoke.ts && node --import tsx packages/x402ify/test/mpp.smoke.ts && node --import tsx packages/x402ify/test/buyer.smoke.ts && node --import tsx apps/mcp/test/mcp.smoke.ts",
+    "test": "node --import tsx packages/x402ify/test/challenge.smoke.ts && node --import tsx packages/x402ify/test/mpp.smoke.ts && node --import tsx packages/x402ify/test/buyer.smoke.ts && node --import tsx apps/mcp/test/mcp.smoke.ts && node --import tsx apps/hub/test/persist.smoke.ts",
     "typecheck": "tsc -b --pretty"
   },
   "devDependencies": {

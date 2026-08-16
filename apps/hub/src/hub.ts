@@ -6,10 +6,12 @@ import express, { type Express } from "express";
 import { WebSocketServer, WebSocket } from "ws";
 import type { GatewayEvent } from "@omni402/x402ify";
 import { Store } from "./store.js";
+import { createPersistence, type Persistence } from "./persist.js";
 import { renderPayLanding, type LaneMeta } from "./landing.js";
 
 export interface Hub {
   store: Store;
+  persistence: Persistence;
   /** Feed an event in-process (used when the hub runs the gateways itself). */
   publish(e: GatewayEvent): void;
   /** Mount a lane's gateway under /pay/<slug> on the hub's public port. */
@@ -25,6 +27,9 @@ const DASHBOARD_DIST = path.resolve(__dirname, "../../dashboard/dist");
 
 export function createHub(): Hub {
   const store = new Store();
+  // Persistence loads any prior snapshot into the store IMMEDIATELY, so the
+  // dashboard is populated from disk before the first client connects.
+  const persistence = createPersistence(store);
   const app = express();
   app.set("trust proxy", true); // honor X-Forwarded-* behind Railway/Render/Fly
   const server = createServer(app);
@@ -39,6 +44,7 @@ export function createHub(): Hub {
 
   const publish = (e: GatewayEvent) => {
     store.ingest(e);
+    persistence.markDirty();
     broadcast(e);
   };
 
@@ -87,6 +93,7 @@ export function createHub(): Hub {
 
   return {
     store,
+    persistence,
     publish,
     mountLane(slug: string, laneApp: Express, meta: LaneMeta) {
       laneRouter.use(`/${slug}`, laneApp);

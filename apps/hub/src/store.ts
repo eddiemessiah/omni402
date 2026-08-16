@@ -111,6 +111,41 @@ export class Store {
     const hour = new Date(ts).toISOString().slice(0, 13); // YYYY-MM-DDTHH
     this.callsByHour.set(hour, (this.callsByHour.get(hour) || 0) + 1);
   }
+
+  /**
+   * Dump internal state for persistence. Maps go to entry arrays so JSON round-
+   * trips cleanly. Only the fields on ApiStat/GatewayEvent that we already
+   * accept from the wire are stored, so a load never introduces unknown keys.
+   */
+  serialize(): {
+    apis: [string, ApiStat][];
+    payments: GatewayEvent[];
+    events: GatewayEvent[];
+    callsByHour: [string, number][];
+  } {
+    return {
+      apis: [...this.apis.entries()],
+      payments: [...this.payments],
+      events: [...this.events],
+      callsByHour: [...this.callsByHour.entries()],
+    };
+  }
+
+  /**
+   * Restore a previously serialized snapshot. Called once at boot; safe to skip
+   * silently on unrecognized shape rather than crash the hub.
+   */
+  restore(dump: {
+    apis: [string, ApiStat][];
+    payments: GatewayEvent[];
+    events: GatewayEvent[];
+    callsByHour: [string, number][];
+  }): void {
+    this.apis = new Map(dump.apis);
+    this.payments = dump.payments.slice(0, MAX_PAYMENTS);
+    this.events = dump.events.slice(0, MAX_EVENTS);
+    this.callsByHour = new Map(dump.callsByHour);
+  }
 }
 
 /** Format atomic base units to a human decimal string for a 6-dp stablecoin. */
