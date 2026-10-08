@@ -1,16 +1,23 @@
 {
-  "type": "Agent",
+  "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
   "name": "Omni402 Agent",
-  "description": "Autonomous agent that turns any HTTP API into a pay-per-call x402/MPP endpoint on Celo and pays them per call in USDC — no accounts, no keys, no gas. Discovers endpoints and settles payments through the Celo x402 facilitator.",
-  "endpoints": [
+  "description": "Turns any HTTP API into a pay-per-call x402 endpoint settled in USDC on Celo, and pays such endpoints per call through an MCP server. Discovers endpoints and settles payments through the Celo x402 facilitator.",
+  "services": [
     {
-      "type": "mcp",
-      "url": "https://github.com/eddiemessiah/omni402"
+      "name": "MCP",
+      "endpoint": "https://github.com/eddiemessiah/omni402/tree/main/apps/mcp"
     },
     {
-      "type": "wallet",
-      "address": "0x20ECAe56e1c21a0d4079bDD0202D0fb6d1FD5000",
-      "chainId": 42220
+      "name": "web",
+      "endpoint": "https://omni402.vercel.app/"
+    }
+  ],
+  "x402Support": true,
+  "active": true,
+  "registrations": [
+    {
+      "agentId": 9765,
+      "agentRegistry": "eip155:42220:0x8004A169FB4a3325136EB29fA0ceB6D2e539a432"
     }
   ],
   "supportedTrust": ["reputation"]
